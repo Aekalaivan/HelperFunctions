@@ -57,18 +57,23 @@ function basic_Response_Validations(){
 }
 
 function basic_Request_Validations() {
+    let requestJOSN = JSON.parse(request.data);
     describe("Basic Request validations", ()=> {
 
         it("Is Request in JSON format?", ()=> {
-            JSON.parse(request.data).should.be.an("object");
+            requestJOSN.should.be.an("object");
+        });
+
+        it("Does request has the object \"requet\"", ()=> {
+            requestJOSN.should.contain.all.keys("request");
         });
 
         it("Is Request has the key \"appID\"?", ()=> {
-            JSON.parse(request.data).request.should.contain.all.keys("appID");
+            requestJOSN.request.should.contain.all.keys("appID");
         });
 
         it("Does Request JSON has an object \"data\"?", ()=> {
-            JSON.parse(request.data).request.should.contain.all.keys("data");
+            requestJOSN.request.should.contain.all.keys("data");
         });
 
         it("Is HTTP method POST?", ()=> {
@@ -216,5 +221,23 @@ function chart_Response_Validation(){
 }
 
 function chart_Request_Validation(){
-    
+    let requestJOSN = JSON.parse(request.data);
+    describe("Chart Request Validations", ()=> {
+
+        it("Does request has the object \"requet\"?", ()=> {
+            requestJOSN.should.contain.all.keys("request");
+        });
+
+        if (it("Does the object \"data\" contains keys \"internal\" and \"symbol\" and are not empty?", ()=> {
+                requestJOSN.request.data.should.contain.all.keys("interval", "symbol");
+            }))
+        {
+            it("The objects \"interval\" and \"symbol\" should be a stringa and not empty", ()=> {
+                requestJOSN.request.data.interval.should.be.a("string");
+                requestJOSN.request.data.symbol.should.be.a("string");
+                requestJOSN.request.data.interval.should.not.be.empty;
+                requestJOSN.request.data.symbolName.should.not.be.empty;
+            });
+        }
+    });
 }
